@@ -94,6 +94,57 @@ ax.view_init(elev=70, azim=90)
 plt.show()
 
 # --------------------------------------------------------------------------
+# Task 3: mat_vase dataset
+# --------------------------------------------------------------------------
+
+# loaded using function provided in ps_utils
+I, mask, S = ps_utils.read_data_file('mat_vase.mat')  
+
+nz = np.where(mask > 0) # pixels in non-zero part
+m, n = mask.shape
+J = np.zeros((3, len(nz[0]))) # array J for the non-zero region
+for i in range(3):
+    Ii = I[:, :, i]  # extract images
+    J[i, :] = Ii[nz]  # assign the pixels substituting the zeros
+
+# compute albedo modulated normal field 
+Si = la.inv(S)  
+M = np.dot(Si, J)
+Rho = la.norm(M, axis=0)  # euclidean norm for albedo values
+
+# extract the normal components
+N = M / np.tile(Rho, (3, 1))  
+# reshaping them to get a grayscale image
+n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.ones((m, n))
+n1[nz] = N[0, :]  
+n2[nz] = N[1, :]  
+n3[nz] = N[2, :]  # z by convention inizialized to 1
+
+# display image
+albedo_image = np.zeros((m, n))
+albedo_image[nz] = Rho  # use albedo values
+plt.figure()
+plt.title("Albedo Image")
+plt.imshow(albedo_image, cmap='gray')
+plt.colorbar()
+plt.show()
+
+# display normal components
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))  
+components = [(n1, 'n1 (X-component)'), (n2, 'n2 (Y-component)'), 
+              (n3, 'n3 (Z-component)')]
+for ax, (data, title) in zip(axes, components):
+    ax.set_title(title)
+    ax.imshow(data, cmap='gray')
+plt.tight_layout()  
+plt.show()
+
+# solve for depth and display at multiple viewpoints
+z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
+z = np.nan_to_num(z)  # in case of nan values
+ps_utils.display_surface(z)
+
+# --------------------------------------------------------------------------
 # Task 4: shiny vase Dataset
 # --------------------------------------------------------------------------
 # 
