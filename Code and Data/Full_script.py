@@ -3,6 +3,63 @@ import ps_utils
 import numpy.linalg as la
 import matplotlib.pyplot as plt
 
+# Q3 mat_vase dataset
+
+# loaded using function provided in ps_utils
+I, mask, S = ps_utils.read_data_file('mat_vase.mat')  
+
+nz = np.where(mask > 0) # pixels in non-zero part
+m, n = mask.shape
+J = np.zeros((3, len(nz[0]))) # array J for the non-zero region
+for i in range(3):
+    Ii = I[:, :, i]  # extract images
+    J[i, :] = Ii[nz]  # assign the pixels substituting the zeros
+
+# compute albedo modulated normal field 
+Si = la.inv(S)  
+M = np.dot(Si, J)
+Rho = la.norm(M, axis=0)  # euclidean norm for albedo values
+
+# extract the normal components
+N = M / np.tile(Rho, (3, 1))  
+# reshaping them to get a grayscale image
+n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.ones((m, n))
+n1[nz] = N[0, :]  
+n2[nz] = N[1, :]  
+n3[nz] = N[2, :]  # z by convention inizialized to 1
+
+# display image
+albedo_image = np.zeros((m, n))
+albedo_image[nz] = Rho  # use albedo values
+plt.figure()
+plt.title("Albedo Image")
+plt.imshow(albedo_image, cmap='gray')
+plt.colorbar()
+plt.show()
+
+# display normal components
+_, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
+ax1.set_title('n1 (X-component)')
+ax1.imshow(n1, cmap='gray')
+
+ax2.set_title('n2 (Y-component)')
+ax2.imshow(n2, cmap='gray')
+
+ax3.set_title('n3 (Z-component)')
+ax3.imshow(n3, cmap='gray')
+
+plt.show()
+
+# Step 9: Solve for depth using unbiased integration
+z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
+z = np.nan_to_num(z)  # Replace NaN values with zero for visualization
+
+# Step 10: Display depth surface at multiple viewpoints
+ps_utils.display_surface(z)
+
+
+
+
 # Q4 shiny_vase dataset - The code up until RANSAC stems from the beethoven_run-.py file and has been modified to fit Q4 for the assignment.
 #Load data
 I, mask, S = ps_utils.read_data_file('shiny_vase.mat')
