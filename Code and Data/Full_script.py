@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import os
 
 
-os.chdir('/Users/nicolefavero/Documents/VIP/assignment_3/VIP_Photometric-Stereo/Code and Data')
+os.chdir('/Users/francescasalute/Dropbox/Mac/Documents/Master in Data Science/Third Semester/Vision and Image Processing/Assignment_3/VIP_Photometric-Stereo/Code and Data')
 print("Changed Working Directory:", os.getcwd())
 
 # The code up until RANSAC stems from the beethoven_run-.py file and has been modified to adapt to the requirements in each task of the assignment.
@@ -115,17 +115,17 @@ Rho = la.norm(M, axis=0)  # euclidean norm for albedo values
 # extract the normal components
 N = M / np.tile(Rho, (3, 1))  
 # reshaping them to get a grayscale image
-n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.ones((m, n))
+n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.zeros((m, n))
 n1[nz] = N[0, :]  
 n2[nz] = N[1, :]  
-n3[nz] = N[2, :]  # z by convention inizialized to 1
+n3[nz] = N[2, :]  
 
 # display image
 albedo_image = np.zeros((m, n))
 albedo_image[nz] = Rho  # use albedo values
 plt.figure()
 plt.title("Albedo Image")
-plt.imshow(albedo_image, cmap='gray')
+plt.imshow(albedo_image)
 plt.colorbar()
 plt.show()
 
@@ -135,7 +135,7 @@ components = [(n1, 'n1 (X-component)'), (n2, 'n2 (Y-component)'),
               (n3, 'n3 (Z-component)')]
 for ax, (data, title) in zip(axes, components):
     ax.set_title(title)
-    ax.imshow(data, cmap='gray')
+    ax.imshow(data)
 plt.tight_layout()  
 plt.show()
 
@@ -238,6 +238,111 @@ ax3.imshow(n3_smooth)
 ax3.set_title("n3 (Smoothed)")
 plt.show()
 
+# --------------------------------------------------------------------------
+# Task 5: shiny vase Dataset
+# --------------------------------------------------------------------------
+# 
+# load data and prepare it
+I, mask, S = ps_utils.read_data_file('shiny_vase2.mat') 
+
+nz = np.where(mask > 0)  
+m, n = mask.shape    
+J = np.zeros((22, len(nz[0])))  
+for i in range(22):
+    Ii = I[:, :, i]  
+    J[i, :] = Ii[nz]
+
+# albedo with the pseudo inverse
+iS = np.linalg.pinv(S)
+M = np.dot(iS, J)
+Rho = la.norm(M, axis=0)
+
+# normal components and reshape
+N = M / np.tile(Rho, (3, 1))
+n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.zeros((m, n))
+n1[nz] = N[0, :]
+n2[nz] = N[1, :]
+n3[nz] = N[2, :]
+
+# display albedo
+albedo_image = np.zeros((m, n))
+albedo_image[nz] = Rho
+plt.figure()
+plt.title("Albedo Image")
+plt.imshow(albedo_image, cmap='gray')
+plt.colorbar()
+plt.show()
+
+# display normal components
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+components = [(n1, 'n1 (X-component)'), (n2, 'n2 (Y-component)'), 
+              (n3, 'n3 (Z-component)')]
+for ax, (data, title) in zip(axes, components):
+    ax.set_title(title)
+    ax.imshow(data, cmap='gray')
+plt.tight_layout()
+plt.show()
+
+# depth and viewpoints
+z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
+z = np.nan_to_num(z)
+
+ps_utils.display_surface(z)
+
+# try RANSAC
+# pixel by pixel operation
+
+M_ransac = np.zeros_like(M)
+
+for i in range(len(nz[0])):
+    pixel_intensities = J[:,i]
+    IS = (pixel_intensities, S)
+    normal, _, _ = ps_utils.ransac_3dvector(IS, 2.0)
+    M_ransac[:, i] = normal * np.linalg.norm(pixel_intensities)
+
+Rho_ransac = np.linalg.norm(M_ransac, axis=0) + 1e-8  
+print(f"Rho_ransac[{i}] = {Rho_ransac[i]}, type: {type(Rho_ransac[i])}, shape: {np.shape(Rho_ransac[i])}")
+N_ransac = M_ransac / np.tile(Rho_ransac, (3, 1))
+print(f"N_ransac shape: {N_ransac.shape}")
+
+# Fill the normal components into 2D arrays for visualization
+n1_ransac = np.zeros((m, n))
+n2_ransac = np.zeros((m, n))
+n3_ransac = np.zeros((m, n))
+n1_ransac[nz] = N_ransac[0, :]
+n2_ransac[nz] = N_ransac[1, :]
+n3_ransac[nz] = N_ransac[2, :]
+
+# diplay ransac
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+components = [(n1_ransac, 'n1 (X-component, RANSAC)'), 
+              (n2_ransac, 'n2 (Y-component, RANSAC)'), 
+              (n3_ransac, 'n3 (Z-component, RANSAC)')]
+
+for ax, (data, title) in zip(axes, components):
+    ax.set_title(title)
+    ax.imshow(data, cmap='gray')
+plt.tight_layout()
+plt.show()
+
+# smooth field with different iters
+for iters in [5, 15, 30]:
+    n1_smooth, n2_smooth, n3_smooth = ps_utils.smooth_normal_field(
+        n1_ransac, n2_ransac, n3_ransac, mask, iters=iters)
+    
+# diplay results
+print(f"Results after smoothing with {iters} iterations:")
+
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))
+components = [(n1_smooth, 'n1 (X-component, Smoothed)'), 
+              (n2_smooth, 'n2 (Y-component, Smoothed)'), 
+              (n3_smooth, 'n3 (Z-component, Smoothed)')]
+
+for ax, (data, title) in zip(axes, components):
+    ax.set_title(title)
+    ax.imshow(data)
+plt.tight_layout()
+plt.show()
 
 # --------------------------------------------------------------------------
 # Task 6: Buddha Dataset
