@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 import os
 
 
-os.chdir('https://github.com/Oatlake/VIP_Photometric-Stereo/tree/d5ca217a4e38a56e0a6a7d4a5fe03f232fb8ad11/Code%20and%20Data')
+os.chdir('/Users/francescasalute/Dropbox/Mac/Documents/Master in Data Science/Third Semester/Vision and Image Processing/Assignment_3/VIP_Photometric-Stereo/Code and Data')
 print("Changed Working Directory:", os.getcwd())
 
 # The code up until RANSAC stems from the beethoven_run-.py file and has been modified to adapt to the requirements in each task of the assignment.
@@ -115,7 +115,7 @@ Rho = la.norm(M, axis=0)  # euclidean norm for albedo values
 # extract the normal components
 N = M / np.tile(Rho, (3, 1))  
 # reshaping them to get a grayscale image
-n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.zero((m, n))
+n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.zeros((m, n))
 n1[nz] = N[0, :]  
 n2[nz] = N[1, :]  
 n3[nz] = N[2, :]  
@@ -292,29 +292,32 @@ ps_utils.display_surface(z)
 # try RANSAC
 # pixel by pixel operation
 
-Rho_ransac = np.zeros(len(nz[0]))
-N_ransac = np.zeros((3, len(nz[0])))
-for i in range(len(nz[0])):
-    Int_pixel = J[:, i]  # Intensity values for this pixel
-    result = ps_utils.ransac_3dvector((Int_pixel, S), threshold=2.0)
-    if result:
-        m, _, _ = result  
-        Rho_ransac[i] = np.linalg.norm(m) # albedo 
-        N_ransac[:, i] = m / Rho_ransac[i] # normals
-    else:
-        raise ValueError(f"RANSAC failed for pixel index {i}. Aborting.") 
+M_ransac = np.zeros_like(M)
 
-# reshape to get 2D arrays
-n1_r, n2_r, n3_r = np.zeros((m, n)), np.zeros((m, n)), np.zeros((m, n))
-n1_r[nz] = N_ransac[0,:]
-n2_r[nz] = N_ransac[1,:]
-n3_r[nz] = N_ransac[2,:]
+for i in range(len(nz[0])):
+    pixel_intensities = J[:,i]
+    IS = (pixel_intensities, S)
+    normal, _, _ = ps_utils.ransac_3dvector(IS, 2.0)
+    M_ransac[:, i] = normal * np.linalg.norm(pixel_intensities)
+
+Rho_ransac = np.linalg.norm(M_ransac, axis=0) + 1e-8  
+print(f"Rho_ransac[{i}] = {Rho_ransac[i]}, type: {type(Rho_ransac[i])}, shape: {np.shape(Rho_ransac[i])}")
+N_ransac = M_ransac / np.tile(Rho_ransac, (3, 1))
+print(f"N_ransac shape: {N_ransac.shape}")
+
+# Fill the normal components into 2D arrays for visualization
+n1_ransac = np.zeros((m, n))
+n2_ransac = np.zeros((m, n))
+n3_ransac = np.zeros((m, n))
+n1_ransac[nz] = N_ransac[0, :]
+n2_ransac[nz] = N_ransac[1, :]
+n3_ransac[nz] = N_ransac[2, :]
 
 # diplay ransac
 fig, axes = plt.subplots(1, 3, figsize=(15, 5))
-components = [(n1_r, 'n1 (X-component, RANSAC)'), 
-              (n2_r, 'n2 (Y-component, RANSAC)'), 
-              (n3_r, 'n3 (Z-component, RANSAC)')]
+components = [(n1_ransac, 'n1 (X-component, RANSAC)'), 
+              (n2_ransac, 'n2 (Y-component, RANSAC)'), 
+              (n3_ransac, 'n3 (Z-component, RANSAC)')]
 
 for ax, (data, title) in zip(axes, components):
     ax.set_title(title)
@@ -325,7 +328,7 @@ plt.show()
 # smooth field with different iters
 for iters in [5, 15, 30]:
     n1_smooth, n2_smooth, n3_smooth = ps_utils.smooth_normal_field(
-        n1_r, n2_r, n3_r, mask, iters)
+        n1_ransac, n2_ransac, n3_ransac, mask, iters=iters)
     
 # diplay results
 print(f"Results after smoothing with {iters} iterations:")
