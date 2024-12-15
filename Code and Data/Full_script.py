@@ -38,27 +38,19 @@ plt.colorbar()
 plt.show()
 
 # display normal components
-_, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-ax1.set_title('n1 (X-component)')
-ax1.imshow(n1, cmap='gray')
-
-ax2.set_title('n2 (Y-component)')
-ax2.imshow(n2, cmap='gray')
-
-ax3.set_title('n3 (Z-component)')
-ax3.imshow(n3, cmap='gray')
-
+fig, axes = plt.subplots(1, 3, figsize=(15, 5))  
+components = [(n1, 'n1 (X-component)'), (n2, 'n2 (Y-component)'), 
+              (n3, 'n3 (Z-component)')]
+for ax, (data, title) in zip(axes, components):
+    ax.set_title(title)
+    ax.imshow(data, cmap='gray')
+plt.tight_layout()  
 plt.show()
 
-# Step 9: Solve for depth using unbiased integration
+# solve for depth and display at multiple viewpoints
 z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
-z = np.nan_to_num(z)  # Replace NaN values with zero for visualization
-
-# Step 10: Display depth surface at multiple viewpoints
+z = np.nan_to_num(z)  # in case of nan values
 ps_utils.display_surface(z)
-
-
-
 
 # Q4 shiny_vase dataset - The code up until RANSAC stems from the beethoven_run-.py file and has been modified to fit Q4 for the assignment.
 #Load data
