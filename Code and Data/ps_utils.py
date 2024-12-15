@@ -711,10 +711,7 @@ def display_surface(z, albedo=None):
     -------
     None.
     """
-    if surf_backend == "mayavi":
-        display_surface_mayavi(z, albedo=albedo)
-    else:
-        display_surface_matplotlib(z, albedo=albedo)
+    display_surface_matplotlib(z, albedo=albedo)
 
 
 def display_surface_mayavi(z, albedo=None):
