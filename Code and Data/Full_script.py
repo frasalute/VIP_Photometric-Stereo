@@ -1,8 +1,15 @@
+## Assignment 3: Photometric Stereo
+## Francesca Salute --> bhn327
+## Martin Havresøe --> lwz885
+## Nicole Favero --> sxr554 
+
+# import libraries
 import numpy as np
 import ps_utils
 import numpy.linalg as la
 import matplotlib.pyplot as plt
 import os
+
 
 os.chdir('/Users/nicolefavero/Documents/VIP/assignment_3/VIP_Photometric-Stereo/Code and Data')
 print("Changed Working Directory:", os.getcwd())
