@@ -163,27 +163,27 @@ n3_ransac[nz] = N_ransac[2, :]
 
 # Display the RANSAC results
 _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-ax1.imshow(n1_ransac, cmap='coolwarm')
+ax1.imshow(n1_ransac)
 ax1.set_title("n1 (RANSAC)")
-ax2.imshow(n2_ransac, cmap='coolwarm')
+ax2.imshow(n2_ransac)
 ax2.set_title("n2 (RANSAC)")
-ax3.imshow(n3_ransac, cmap='coolwarm')
+ax3.imshow(n3_ransac)
 ax3.set_title("n3 (RANSAC)")
 plt.show()
 
 
 # Smooth the normal field using `smooth_normal_field`
 n1_smooth, n2_smooth, n3_smooth = ps_utils.smooth_normal_field(
-    n1_ransac, n2_ransac, n3_ransac, mask, iters=15
+    n1_ransac, n2_ransac, n3_ransac, mask, iters=10
 )
 
 # Display the smoothed results
 _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-ax1.imshow(n1_smooth, cmap='coolwarm')
+ax1.imshow(n1_smooth)
 ax1.set_title("n1 (Smoothed)")
-ax2.imshow(n2_smooth, cmap='coolwarm')
+ax2.imshow(n2_smooth)
 ax2.set_title("n2 (Smoothed)")
-ax3.imshow(n3_smooth, cmap='coolwarm')
+ax3.imshow(n3_smooth)
 ax3.set_title("n3 (Smoothed)")
 plt.show()
 
@@ -241,7 +241,7 @@ M_ransac = np.zeros_like(M)
 for i in range(len(nz[0])):
     pixel_intensities = J[:,i]
     IS = (pixel_intensities, S)
-    normal, _, _ = ps_utils.ransac_3dvector(IS, 25.0)
+    normal, _, _ = ps_utils.ransac_3dvector(IS, 35.0)
     M_ransac[:, i] = normal * np.linalg.norm(pixel_intensities)
 
 rho_ransac = np.linalg.norm(M_ransac, axis=0) + 1e-8  # Prevent zero division
@@ -257,29 +257,30 @@ n3_ransac[nz] = N_ransac[2, :]
 
 # Display the RANSAC results
 _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-ax1.imshow(n1_ransac, cmap='coolwarm')
+ax1.imshow(n1_ransac)
 ax1.set_title("n1 (RANSAC)")
-ax2.imshow(n2_ransac, cmap='coolwarm')
+ax2.imshow(n2_ransac)
 ax2.set_title("n2 (RANSAC)")
-ax3.imshow(n3_ransac, cmap='coolwarm')
+ax3.imshow(n3_ransac)
 ax3.set_title("n3 (RANSAC)")
 plt.show()
 
 
 # Smooth the normal field using `smooth_normal_field`
 n1_smooth, n2_smooth, n3_smooth = ps_utils.smooth_normal_field(
-    n1_ransac, n2_ransac, n3_ransac, mask, iters=15
+    n1_ransac, n2_ransac, n3_ransac, mask, iters=10
 )
 
 # Display the smoothed results
 _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
-ax1.imshow(n1_smooth, cmap='coolwarm')
+ax1.imshow(n1_smooth)
 ax1.set_title("n1 (Smoothed)")
-ax2.imshow(n2_smooth, cmap='coolwarm')
+ax2.imshow(n2_smooth)
 ax2.set_title("n2 (Smoothed)")
-ax3.imshow(n3_smooth, cmap='coolwarm')
+ax3.imshow(n3_smooth)
 ax3.set_title("n3 (Smoothed)")
 plt.show()
+
 
 # --------------------------------------------------------------------------
 # Task 7: Face Dataset
