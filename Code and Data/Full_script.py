@@ -178,7 +178,7 @@ n3[nz] = N[2,:]
 
 
 #Display the results from applying Lamberts law - which the dataset does not abide by as it introduces specularities 
-_,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5)
+_,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5))
 ax1.imshow(n1)
 ax1.set_title("n1")
 ax2.imshow(n2)
@@ -380,7 +380,7 @@ n3[nz] = N[2,:]
 
 
 #Display the results from applying Lamberts law - which the dataset does not abide by as it introduces specularities 
-_,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5)
+_,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5))
 ax1.imshow(n1)
 ax1.set_title("n1")
 ax2.imshow(n2)
