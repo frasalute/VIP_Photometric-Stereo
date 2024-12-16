@@ -534,6 +534,13 @@ ax2.imshow(n2_ransac)
 ax3.imshow(n3_ransac)
 plt.show()
 
+#compute depth map
+z = ps_utils.unbiased_integrate(n1_ransac, n2_ransac, n3_ransac, mask)
+z = np.nan_to_num(z)
+
+#default view
+ps_utils.display_surface(z)
+
 # Smooth the normal field with different 'iters' values
 for iters in [5, 15, 30]:
     n1_smooth, n2_smooth, n3_smooth = ps_utils.smooth_normal_field(
@@ -548,4 +555,9 @@ for iters in [5, 15, 30]:
     ax3.imshow(n3_smooth)
     plt.show()
 
+    z = ps_utils.unbiased_integrate(n1_smooth, n2_smooth, n3_smooth, mask)
+    z = np.nan_to_num(z)
+
+    #default view
+    ps_utils.display_surface(z)
 
