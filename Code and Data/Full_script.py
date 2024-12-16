@@ -95,7 +95,7 @@ ax.view_init(elev=70, azim=90)
 plt.show()
 
 # --------------------------------------------------------------------------
-# Task 3: mat_vase dataset
+# Task 3: mat_vase Dataset
 # --------------------------------------------------------------------------
 
 # loaded using function provided in ps_utils
