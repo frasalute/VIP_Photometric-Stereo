@@ -198,6 +198,14 @@ n1[nz] = N[0,:]
 n2[nz] = N[1,:]
 n3[nz] = N[2,:]
 
+# display image
+albedo_image = np.zeros((m, n))
+albedo_image[nz] = rho  # use albedo values
+plt.figure()
+plt.title("Albedo Image")
+plt.imshow(albedo_image, cmap='gray')
+plt.colorbar()
+plt.show()
 
 #Display the results  
 _,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5))
