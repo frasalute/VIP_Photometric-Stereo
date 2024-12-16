@@ -146,6 +146,7 @@ z = np.nan_to_num(z)  # in case of nan values
 ps_utils.display_surface(z)
 
 # try to show it more 3D
+m, n = z.shape  # Dimensions of the depth map
 x, y = np.meshgrid(np.arange(n), np.arange(m))
 
 # use multiple viewpoints
