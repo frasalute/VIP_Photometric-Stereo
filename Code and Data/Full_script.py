@@ -11,7 +11,8 @@ import matplotlib.pyplot as plt
 import os
 
 
-os.chdir('/Users/francescasalute/Dropbox/Mac/Documents/Master in Data Science/Third Semester/Vision and Image Processing/Assignment_3/VIP_Photometric-Stereo/Code and Data')
+script_dir = os.path.dirname(os.path.abspath(__file__))
+os.chdir(script_dir)
 print("Changed Working Directory:", os.getcwd())
 
 # The code up until RANSAC stems from the beethoven_run-.py file and has been modified to adapt to the requirements in each task of the assignment.
@@ -177,7 +178,7 @@ n2[nz] = N[1,:]
 n3[nz] = N[2,:]
 
 
-#Display the results from applying Lamberts law - which the dataset does not abide by as it introduces specularities 
+#Display the results  
 _,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5))
 ax1.imshow(n1)
 ax1.set_title("n1")
@@ -187,11 +188,32 @@ ax3.imshow(n3)
 ax3.set_title("n3")
 plt.show()
 
+#compute depth map
 z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
 z = np.nan_to_num(z)
 
+#default view
 ps_utils.display_surface(z)
 
+# Define x and y for 3D plotting
+m, n = z.shape  # Dimensions of the depth map
+x, y = np.meshgrid(np.arange(n), np.arange(m))
+
+# Display the surface from a different viewpoint
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+ax.plot_surface(x, y, z, cmap='gray')
+ax.view_init(elev=-50, azim=45)  
+ax.set_title('View 2')
+plt.show()
+
+# Display the surface from a different viewpoint
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+ax.plot_surface(x, y, z, cmap='gray')
+ax.view_init(elev=70, azim=90)  
+ax.set_title('View 3')
+plt.show()
 
 #Now try with RANSAC
 #Initialise rays for albedo and normale using RANSAC
@@ -379,7 +401,7 @@ n2[nz] = N[1,:]
 n3[nz] = N[2,:]
 
 
-#Display the results from applying Lamberts law - which the dataset does not abide by as it introduces specularities 
+#Display the results
 _,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5))
 ax1.imshow(n1)
 ax1.set_title("n1")
@@ -389,11 +411,32 @@ ax3.imshow(n3)
 ax3.set_title("n3")
 plt.show()
 
+#compute depth map
 z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
 z = np.nan_to_num(z)
 
+#default view
 ps_utils.display_surface(z)
 
+# Define x and y for 3D plotting
+m, n = z.shape  # Dimensions of the depth map
+x, y = np.meshgrid(np.arange(n), np.arange(m))
+
+# Display the surface from a different viewpoint
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+ax.plot_surface(x, y, z, cmap='gray')
+ax.view_init(elev=-50, azim=45)
+ax.set_title('View 2')
+plt.show()
+
+# Display the surface from a different viewpoint
+fig = plt.figure()
+ax = fig.add_subplot(projection='3d')
+ax.plot_surface(x, y, z, cmap='gray')
+ax.view_init(elev=70, azim=90)
+ax.set_title('View 3')
+plt.show()
 
 #Now try with RANSAC
 #Initialise rays for albedo and normale using RANSAC
