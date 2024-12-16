@@ -115,7 +115,7 @@ Rho = la.norm(M, axis=0)  # euclidean norm for albedo values
 
 # extract the normal components
 N = M / np.tile(Rho, (3, 1))  
-# reshaping them to get a grayscale image
+# reshaping them to get an image
 n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.zeros((m, n))
 n1[nz] = N[0, :]  
 n2[nz] = N[1, :]  
@@ -126,7 +126,7 @@ albedo_image = np.zeros((m, n))
 albedo_image[nz] = Rho  # use albedo values
 plt.figure()
 plt.title("Albedo Image")
-plt.imshow(albedo_image)
+plt.imshow(albedo_image, cmap='gray')
 plt.colorbar()
 plt.show()
 
@@ -264,7 +264,7 @@ ax3.set_title("n3 (Smoothed RANSAC)")
 plt.show()
 
 # --------------------------------------------------------------------------
-# Task 5: shiny vase Dataset
+# Task 5: shiny vase Dataset2
 # --------------------------------------------------------------------------
 # 
 # load data and prepare it
