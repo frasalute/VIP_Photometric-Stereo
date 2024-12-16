@@ -178,7 +178,7 @@ n3[nz] = N[2,:]
 
 
 #Display the results from applying Lamberts law - which the dataset does not abide by as it introduces specularities 
-_,(ax1,ax2,ax3) = plt.subplots(1,3)
+_,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5)
 ax1.imshow(n1)
 ax2.imshow(n2)
 ax3.imshow(n3)
@@ -199,9 +199,9 @@ for i in range(len(nz[0])):
     pixel_intensities = J[:,i]
     IS = (pixel_intensities, S)
     normal, _, _ = ps_utils.ransac_3dvector(IS, 2.0)
-    M_ransac[:, i] = normal * np.linalg.norm(pixel_intensities)
+    M_ransac[:, i] = normal * la.norm(pixel_intensities)
 
-rho_ransac = np.linalg.norm(M_ransac, axis=0) + 1e-8  # Prevent zero division
+rho_ransac = la.norm(M_ransac, axis=0) + 1e-8  # Prevent zero division
 N_ransac = M_ransac / np.tile(rho_ransac, (3, 1))
 
 # Fill the normal components into 2D arrays for visualization
@@ -377,7 +377,7 @@ n3[nz] = N[2,:]
 
 
 #Display the results from applying Lamberts law - which the dataset does not abide by as it introduces specularities 
-_,(ax1,ax2,ax3) = plt.subplots(1,3)
+_,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5)
 ax1.imshow(n1)
 ax2.imshow(n2)
 ax3.imshow(n3)
@@ -398,9 +398,9 @@ for i in range(len(nz[0])):
     pixel_intensities = J[:,i]
     IS = (pixel_intensities, S)
     normal, _, _ = ps_utils.ransac_3dvector(IS, 35.0)
-    M_ransac[:, i] = normal * np.linalg.norm(pixel_intensities)
+    M_ransac[:, i] = normal * la.norm(pixel_intensities)
 
-rho_ransac = np.linalg.norm(M_ransac, axis=0) + 1e-8  # Prevent zero division
+rho_ransac = la.norm(M_ransac, axis=0) + 1e-8  # Prevent zero division
 N_ransac = M_ransac / np.tile(rho_ransac, (3, 1))
 
 # Fill the normal components into 2D arrays for visualization
