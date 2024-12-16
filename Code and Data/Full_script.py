@@ -145,6 +145,27 @@ z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
 z = np.nan_to_num(z)  # in case of nan values
 ps_utils.display_surface(z)
 
+# try to show it more 3D
+x, y = np.meshgrid(np.arange(n), np.arange(m))
+
+# use multiple viewpoints
+fig = plt.figure(figsize=(10, 6))
+
+# 1
+ax1 = fig.add_subplot(1, 2, 1, projection='3d')
+ax1.plot_surface(x, y, z, cmap='gray', rstride=1, cstride=1, linewidth=0, antialiased=True)
+ax1.set_title('Viewpoint 1')
+ax1.view_init(elev=30, azim=-60)  # Adjust angles (elevation, azimuth)
+
+# 2
+ax2 = fig.add_subplot(1, 2, 2, projection='3d')
+ax2.plot_surface(x, y, z, cmap='gray', rstride=1, cstride=1, linewidth=0, antialiased=True)
+ax2.set_title('Viewpoint 2')
+ax2.view_init(elev=60, azim=45)  # Adjust angles (elevation, azimuth)
+
+plt.tight_layout()
+plt.show()
+
 # --------------------------------------------------------------------------
 # Task 4: shiny vase Dataset
 # --------------------------------------------------------------------------
