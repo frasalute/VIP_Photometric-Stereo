@@ -126,7 +126,7 @@ albedo_image = np.zeros((m, n))
 albedo_image[nz] = Rho  # use albedo values
 plt.figure()
 plt.title("Albedo Image")
-plt.imshow(albedo_image)
+plt.imshow(albedo_image, cmap='gray')
 plt.colorbar()
 plt.show()
 
@@ -264,7 +264,7 @@ ax3.set_title("n3 (Smoothed RANSAC)")
 plt.show()
 
 # --------------------------------------------------------------------------
-# Task 5: shiny vase Dataset
+# Task 5: shiny vase Dataset2
 # --------------------------------------------------------------------------
 # 
 # load data and prepare it
