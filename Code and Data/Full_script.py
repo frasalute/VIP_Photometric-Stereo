@@ -115,7 +115,7 @@ Rho = la.norm(M, axis=0)  # euclidean norm for albedo values
 
 # extract the normal components
 N = M / np.tile(Rho, (3, 1))  
-# reshaping them to get a grayscale image
+# reshaping them to get an image
 n1, n2, n3 = np.zeros((m, n)), np.zeros((m, n)), np.zeros((m, n))
 n1[nz] = N[0, :]  
 n2[nz] = N[1, :]  
