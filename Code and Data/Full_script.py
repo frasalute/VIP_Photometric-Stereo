@@ -180,8 +180,11 @@ n3[nz] = N[2,:]
 #Display the results from applying Lamberts law - which the dataset does not abide by as it introduces specularities 
 _,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5)
 ax1.imshow(n1)
+ax1.set_title("n1")
 ax2.imshow(n2)
+ax2.set_title("n2")
 ax3.imshow(n3)
+ax3.set_title("n3")
 plt.show()
 
 z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
@@ -231,11 +234,11 @@ n1_smooth, n2_smooth, n3_smooth = ps_utils.smooth_normal_field(
 # Display the smoothed results
 _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
 ax1.imshow(n1_smooth)
-ax1.set_title("n1 (Smoothed)")
+ax1.set_title("n1 (Smoothed RANSAC)")
 ax2.imshow(n2_smooth)
-ax2.set_title("n2 (Smoothed)")
+ax2.set_title("n2 (Smoothed RANSAC)")
 ax3.imshow(n3_smooth)
-ax3.set_title("n3 (Smoothed)")
+ax3.set_title("n3 (Smoothed RANSAC)")
 plt.show()
 
 # --------------------------------------------------------------------------
@@ -379,8 +382,11 @@ n3[nz] = N[2,:]
 #Display the results from applying Lamberts law - which the dataset does not abide by as it introduces specularities 
 _,(ax1,ax2,ax3) = plt.subplots(1,3, figsize=(15, 5)
 ax1.imshow(n1)
+ax1.set_title("n1")
 ax2.imshow(n2)
+ax2.set_title("n2")
 ax3.imshow(n3)
+ax3.set_title("n3")
 plt.show()
 
 z = ps_utils.unbiased_integrate(n1, n2, n3, mask)
@@ -430,11 +436,11 @@ n1_smooth, n2_smooth, n3_smooth = ps_utils.smooth_normal_field(
 # Display the smoothed results
 _, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(15, 5))
 ax1.imshow(n1_smooth)
-ax1.set_title("n1 (Smoothed)")
+ax1.set_title("n1 (Smoothed RANSAC)")
 ax2.imshow(n2_smooth)
-ax2.set_title("n2 (Smoothed)")
+ax2.set_title("n2 (Smoothed RANSAC)")
 ax3.imshow(n3_smooth)
-ax3.set_title("n3 (Smoothed)")
+ax3.set_title("n3 (Smoothed RANSAC)")
 plt.show()
 
 
