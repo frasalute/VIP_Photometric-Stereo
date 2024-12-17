@@ -61,7 +61,8 @@ The script outputs:
 ## Sample Visualization
 | **Albedo Map** | **Surface Normals** | **3D Reconstruction** |
 |:-------------:|:-------------------:|:---------------------:|
-| ![Albedo](path/to/image1.png) | ![Normals](path/to/image2.png) | ![3D](path/to/image3.png) |
+| ![albedo](https://github.com/user-attachments/assets/aea95718-e06a-4c16-93b6-9aeed8510333)| ![normal compo](https://github.com/user-attachments/assets/d4b037e1-fc45-489b-8f36-33a14b2cc032)
+ | ![3d](https://github.com/user-attachments/assets/47740e5f-1034-4360-865f-929dc7734b2f) |
 
 
 
