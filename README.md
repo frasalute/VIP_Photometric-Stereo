@@ -34,7 +34,7 @@ pip install numpy matplotlib
 ## How to Run
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/photometric-stereo.git
+   git clone https://github.com/frasalute/photometric-stereo.git
    cd photometric-stereo
    ```
 2. Ensure the datasets (e.g., `Beethoven.mat`, `mat_vase.mat`) are in the project directory.
